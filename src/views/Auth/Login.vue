@@ -1,54 +1,57 @@
 <template>
-  <div class="w-full max-w-xs">
-    <h1>Login</h1>
-    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" @submit.prevent="handleSubmit">
-      <div class="mb-4">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
-          Email
-        </label>
-        <input
-          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="email" type="email" placeholder="Email" v-model.trim="email">
-      </div>
-      <div class="mb-6">
-        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
-          Password
-        </label>
-        <input
-          class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-          id="password" type="password" placeholder="******************" v-model.trim="password">
-        <p class="text-red-500 text-xs italic">Please choose a password.</p>
-      </div>
-      <div class="flex items-center justify-between">
-        <button
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="submit" :disabled="userStore.loadingUser">
-          Sign In
-        </button>
-        <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-          Forgot Password?
-        </a>
-      </div>
-    </form>
-    <p class="text-center text-gray-500 text-xs">
-      &copy;2022 Acme Corp. All rights reserved.
-    </p>
-  </div>
+  <a-row>
+    <a-col :xs="{ span: 24 }" :sm="{ span: 18, offset: 3 }" :lg="{ span: 12, offset: 6 }">
+      <a-form :model="formState" @finish="onFinish" @finishFailed="onFinishFailed" name="basic" layout="vertical"
+        autocomplete="off">
+        <a-form-item label="Email" name="email" :rules="[
+          {
+            required: true,
+            type: 'email',
+            message: 'Por favor escriba un email válido',
+          },
+        ]">
+          <a-input v-model:value="formState.email"></a-input>
+        </a-form-item>
+        <a-form-item label="Password" name="password" :rules="[
+          {
+            required: true,
+            min: 6,
+            message:
+              'Por favor escriba una contraseña de 6 carácteres',
+          },
+        ]">
+          <a-input-password v-model:value="formState.password"></a-input-password>
+        </a-form-item>
+        <a-form-item>
+          <a-button type="primary" html-type="submit">Acceder</a-button>
+        </a-form-item>
+      </a-form>
+    </a-col>
+  </a-row>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import { useUserStore } from "@/store/user";
+import { message } from "ant-design-vue";
+import "ant-design-vue/es/message/style/css";
 
 const userStore = useUserStore();
-const email = ref("jlsc92@gmail.com");
-const password = ref("123456");
 
-const handleSubmit = () => {
-  if (!email.value || password.value.length < 6) {
-    alert("ingresa los campos");
+const formState = reactive({
+  password: "",
+  email: "bluuweb1@test.com",
+});
+
+const onFinish = async (values: any) => {
+  console.log("Success:", values);
+  const res = await userStore.loginUser(formState.email, formState.password);
+  if (res === "auth/wrong-password") {
+    message.error("credenciales no válidas");
   }
+};
 
-  userStore.loginUser(email.value, password.value);
+const onFinishFailed = (errorInfo: any) => {
+  console.log("Failed:", errorInfo);
 };
 </script>

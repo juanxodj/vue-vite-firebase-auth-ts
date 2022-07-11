@@ -1,17 +1,11 @@
 import { generateFakeData, Item } from "@/models/item.model";
 import { defineStore } from "pinia";
 
-export type RootState = {
-  items: Item[];
-};
-
 export const useMainStore = defineStore({
   id: "mainStore",
-  state: () =>
-    ({
-      items: [],
-    } as RootState),
-
+  state: () => ({
+    items: [] as Item[],
+  }),
   actions: {
     createNewItem(item: Item) {
       if (!item) return;

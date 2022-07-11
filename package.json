@@ -11,11 +11,14 @@
     "lint:markup": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "ant-design-vue": "^3.3.0-beta.2",
     "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "firebase": "^9.9.0",
     "moment": "^2.29.4",
+    "nanoid": "^4.0.0",
     "pinia": "^2.0.14",
+    "unplugin-vue-components": "^0.21.1",
     "uuid": "^8.3.2",
     "vue": "^3.2.25",
     "vue-router": "^4.1.1",
@@ -42,7 +45,6 @@
     "stylelint": "^14.9.1",
     "stylelint-config-recommended": "^8.0.0",
     "stylelint-config-standard": "^26.0.0",
-    "tailwindcss": "^3.1.5",
     "typescript": "^4.5.4",
     "vite": "^2.9.9",
     "vue-tsc": "^0.34.7"

@@ -1,12 +1,46 @@
 <template>
-  <h1>Home {{ userStore.userData }}</h1>
-  <button type="button"
-    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-    style="margin: 5px" @click.prevent="userStore.signOutUser">Logout</button>
+  <div>
+    <h1>Home</h1>
+
+    <add-form></add-form>
+
+    <a-spin v-if="databaseStore.loadingDoc" />
+
+    <a-space direction="vertical" style="width: 100%">
+      <a-card v-for="item of databaseStore.documents" :key="item.id" :title="item.short">
+        <template #extra>
+          <a-space>
+            <a-button @click="router.push(`/edit/${item.id}`)">Editar</a-button>
+            <a-popconfirm title="¿Estás seguro?" ok-text="Yes" cancel-text="No" @confirm="confirm(item.id)"
+              @cancel="cancel">
+              <a-button danger>Eliminar</a-button>
+            </a-popconfirm>
+          </a-space>
+        </template>
+        <p>{{ item.name }}</p>
+      </a-card>
+    </a-space>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/store/user";
+import { useDatabaseStore } from "@/store/database";
+import { useRouter } from "vue-router";
+import { message } from "ant-design-vue";
 
-const userStore = useUserStore();
+const databaseStore = useDatabaseStore();
+const router = useRouter();
+
+const confirm = (id: string) => {
+  console.log(id);
+  databaseStore.deleteUrl(id);
+  message.success("Eliminado");
+};
+
+const cancel = (e: string) => {
+  console.log(e);
+  message.error("No se eliminó");
+};
+
+databaseStore.getUrls();
 </script>

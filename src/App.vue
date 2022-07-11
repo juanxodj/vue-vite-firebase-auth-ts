@@ -1,55 +1,59 @@
 <template>
-  <div v-if="userStore.loading">Loading...</div>
-  <div v-else>
-    <nav>
-      <router-link to="/" v-if="userStore.userData">
-        Home
-      </router-link> |
-      <router-link to="/about" v-if="userStore.userData">
-        About
-      </router-link> |
-      <router-link to="/data" v-if="userStore.userData">
-        Data
-      </router-link> |
-      <router-link to="/grocery" v-if="userStore.userData">
-        Grocery
-      </router-link> |
-      <router-link to="/login" v-if="Object.keys(userStore.userData).length === 0">
-        Login
-      </router-link> |
-      <router-link to="/register" v-if="Object.keys(userStore.userData).length === 0">
-        Register
-      </router-link>
-    </nav>
-    <router-view />
-  </div>
-
+  <a-layout>
+    <a-layout-header v-if="!userStore.loadingSession">
+      <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">
+        <a-menu-item v-if="userStore.userData" key="home">
+          <router-link to="/">Home</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="userStore.userData" key="perfil">
+          <router-link to="/perfil">Perfil</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="!userStore.userData" key="login">
+          <router-link to="/login">Login</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="!userStore.userData" key="register">
+          <router-link to="/register">Register</router-link>
+        </a-menu-item>
+        <a-menu-item @click="userStore.logoutUser" v-if="userStore.userData" key="logout">
+          Logout
+        </a-menu-item>
+      </a-menu>
+      <nav>| | |</nav>
+    </a-layout-header>
+    <a-layout-content style="padding: 0 50px">
+      <div class="container">
+        <div v-if="userStore.loadingSession">loading user...</div>
+        <router-view v-else></router-view>
+      </div>
+    </a-layout-content>
+  </a-layout>
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { useUserStore } from "@/store/user";
+
 const userStore = useUserStore();
+const route = useRoute();
+const selectedKeys = ref([]);
+
+watch(
+  () => route.name,
+  () => {
+    selectedKeys.value = [route.name];
+  }
+);
 </script>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<style>
+.container {
+  background-color: #fff;
+  padding: 24px;
+  min-height: calc(100vh - 64px);
 }
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.text-center {
+  text-align: center;
 }
 </style>

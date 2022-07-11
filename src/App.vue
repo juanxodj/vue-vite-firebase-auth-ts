@@ -2,19 +2,19 @@
   <a-layout>
     <a-layout-header v-if="!userStore.loadingSession">
       <a-menu theme="dark" mode="horizontal" :style="{ lineHeight: '64px' }" v-model:selectedKeys="selectedKeys">
-        <a-menu-item v-if="userStore.userData" key="home">
+        <a-menu-item v-if="userStore.loggedIn" key="home">
           <router-link to="/">Home</router-link>
         </a-menu-item>
-        <a-menu-item v-if="userStore.userData" key="perfil">
-          <router-link to="/perfil">Perfil</router-link>
+        <a-menu-item v-if="userStore.loggedIn" key="profile">
+          <router-link to="/profile">Perfil</router-link>
         </a-menu-item>
-        <a-menu-item v-if="!userStore.userData" key="login">
+        <a-menu-item v-if="!userStore.loggedIn" key="login">
           <router-link to="/login">Login</router-link>
         </a-menu-item>
-        <a-menu-item v-if="!userStore.userData" key="register">
+        <a-menu-item v-if="!userStore.loggedIn" key="register">
           <router-link to="/register">Register</router-link>
         </a-menu-item>
-        <a-menu-item @click="userStore.logoutUser" v-if="userStore.userData" key="logout">
+        <a-menu-item @click="userStore.logoutUser" v-if="userStore.loggedIn" key="logout">
           Logout
         </a-menu-item>
       </a-menu>

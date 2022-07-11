@@ -36,13 +36,14 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { useUserStore } from "@/store/user";
+import { message } from "ant-design-vue";
 
 const userStore = useUserStore();
 
 const formState = reactive({
-  password: "",
-  repassword: "",
-  email: "bluuweb1@test.com",
+  email: "jlsc92@gmail.com",
+  password: "123456",
+  repassword: "123456",
 });
 
 const validateRePass = async (_rule: any, value: any) => {

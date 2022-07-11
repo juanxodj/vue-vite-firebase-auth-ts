@@ -1,16 +1,25 @@
-import { auth, db, storage } from "@/services/firebase";
-import { createUserWithEmailAndPassword, signOut, signInWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, updateProfile } from "firebase/auth";
 import { defineStore } from "pinia";
-import router from "@/router";
-import { useDatabaseStore } from "./database";
-import { User } from "@/models/user.model";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore/lite";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { auth, db, storage } from "@/services/firebase";
+import router from "../router";
+import { useDatabaseStore } from "@/store/database";
+import { User } from "@/models/user.model";
 
-export const useUserStore = defineStore("user", {
+export const useUserStore = defineStore("userStore", {
   state: () => ({
     userData: {} as User,
     loadingUser: false,
     loadingSession: false,
+    loggedIn: false,
   }),
   actions: {
     async registerUser(email: string, password: string) {
@@ -25,6 +34,46 @@ export const useUserStore = defineStore("user", {
         this.loadingUser = false;
       }
     },
+    async updateUser(displayName: string, imagen: object) {
+      this.loadingUser = true;
+      try {
+        if (imagen) {
+          const storageRef = ref(
+            storage,
+            `profile/${this.userData.uid}`
+          );
+          await uploadBytes(storageRef, imagen.originFileObj);
+          const photoURL = await getDownloadURL(storageRef);
+          await updateProfile(auth.currentUser, {
+            photoURL,
+          });
+        }
+        await updateProfile(auth.currentUser, {
+          displayName,
+        });
+        this.setUser(auth.currentUser);
+      } catch (error) {
+        return error;
+      } finally {
+        this.loadingUser = false;
+      }
+    },
+    async setUser(user: User) {
+      try {
+        const docRef = doc(db, "users", user.uid);
+
+        this.userData = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        };
+
+        await setDoc(docRef, this.userData);
+      } catch (error) {
+        return error;
+      }
+    },
     async loginUser(email: string, password: string) {
       this.loadingUser = true;
       try {
@@ -33,7 +82,8 @@ export const useUserStore = defineStore("user", {
           email,
           password
         );
-        this.userData = { email: user.email, uid: user.uid };
+        await this.setUser(user);
+        this.loggedIn = true;
         router.push("/");
       } catch (error) {
         return error;
@@ -47,58 +97,34 @@ export const useUserStore = defineStore("user", {
       try {
         router.push("/login");
         await signOut(auth);
+        this.loggedIn = false;
       } catch (error) {
-        console.log(error);
+        return error;
       }
     },
     currentUser() {
       return new Promise((resolve, reject) => {
-        const unsubcribe = onAuthStateChanged(
+        const unsuscribe = onAuthStateChanged(
           auth,
-          (user) => {
-            const databaseStore = useDatabaseStore();
+          async (user) => {
             if (user) {
               this.userData = {
-                email: user.email,
                 uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL,
               };
             } else {
               this.userData = {};
+              const databaseStore = useDatabaseStore();
               databaseStore.$reset();
             }
             resolve(user);
           },
           (e) => reject(e)
         );
-        unsubcribe();
+        unsuscribe();
       });
-    },
-    async updateUser(displayName: string, imagen: string) {
-      this.loadingUser = true;
-      try {
-        await updateProfile(auth.currentUser, {
-          displayName,
-        });
-
-        if (imagen) {
-          const storageRef = ref(
-            storage,
-            `perfiles/${this.userData.uid}`
-          );
-          await uploadBytes(storageRef, imagen.originFileObj);
-          const photoURL = await getDownloadURL(storageRef);
-          await updateProfile(auth.currentUser, {
-            photoURL,
-          });
-        }
-
-        this.setUser(auth.currentUser);
-      } catch (error) {
-        console.log(error);
-        return error;
-      } finally {
-        this.loadingUser = false;
-      }
     },
   },
 });

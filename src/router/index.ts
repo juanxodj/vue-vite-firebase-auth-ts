@@ -4,26 +4,26 @@ import { useDatabaseStore } from "@/store/database"
 
 const requireAuth = async (to, from, next) => {
   const userStore = useUserStore();
-  userStore.loading = true;
+  userStore.loadingSession = true;
   const user = await userStore.currentUser();
-  console.log(user);
-  if (user && user.emailVerified) {
+  if (user) {
     next();
   } else {
     next("/login");
   }
-  userStore.loading = false;
+  userStore.loadingSession = false;
 };
 
 const redireccion = async (to, from, next) => {
-  const userStore = useUserStore();
   const databaseStore = useDatabaseStore();
+  const userStore = useUserStore();
   userStore.loadingSession = true;
-  const name = await databaseStore.searchURL(to.params.pathMatch[0]);
+  const name = await databaseStore.getURL(to.params.pathMatch[0]);
   if (!name) {
     next();
     userStore.loadingSession = false;
   } else {
+    window.location.href = name;
     userStore.loadingSession = true;
     next();
   }
@@ -66,6 +66,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/register",
     name: "register",
     component: () => import("@/views/Auth/Register.vue"),
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("@/views/Profile.vue"),
   },
   {
     name: "redireccion",

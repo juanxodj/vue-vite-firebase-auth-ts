@@ -1,6 +1,5 @@
 <template>
   <h1 class="text-center">Perfil de usuario</h1>
-  <!-- <p>{{ userStore.userData }}</p> -->
   <div class="text-center mb-5">
     <a-avatar :src="userStore.userData.photoURL" :size="150"></a-avatar>
   </div>
@@ -59,9 +58,7 @@ const handleRemove = (file) => {
 const handleChange = (info) => {
   // validar los tipos de imágenes
   if (info.file.status !== "uploading") {
-    // console.log(info.file);
-    const isJpgOrPng =
-      info.file.type === "image/jpeg" || info.file.type === "image/png";
+    const isJpgOrPng = info.file.type === "image/jpeg" || info.file.type === "image/png";
     if (!isJpgOrPng) {
       message.error("Solo imagenes png o jpg");
       handleRemove(info.file);

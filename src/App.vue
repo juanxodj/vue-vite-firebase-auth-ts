@@ -5,6 +5,9 @@
     </router-link> |
     <router-link to="/about">
       About
+    </router-link> |
+    <router-link to="/data">
+      Data
     </router-link>
   </nav>
   <router-view />

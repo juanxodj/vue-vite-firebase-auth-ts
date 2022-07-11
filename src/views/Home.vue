@@ -1,11 +1,12 @@
 <template>
   <h1>Home {{ userStore.userData }}</h1>
-  <p>VITE_MY_ENV_VARIABLE: {{ envVariable }}</p>
+  <button type="button"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+    style="margin: 5px" @click.prevent="userStore.signOutUser">Logout</button>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/store/user";
 
 const userStore = useUserStore();
-const envVariable = import.meta.env.VITE_APP_TITLE;
 </script>

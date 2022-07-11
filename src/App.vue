@@ -1,20 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/">
-      Home
-    </router-link> |
-    <router-link to="/about">
-      About
-    </router-link> |
-    <router-link to="/data">
-      Data
-    </router-link>
-  </nav>
-  <router-view />
+  <div v-if="userStore.loading">Loading...</div>
+  <div v-else>
+    <nav>
+      <router-link to="/" v-if="userStore.userData">
+        Home
+      </router-link> |
+      <router-link to="/about" v-if="userStore.userData">
+        About
+      </router-link> |
+      <router-link to="/data" v-if="userStore.userData">
+        Data
+      </router-link> |
+      <router-link to="/grocery" v-if="userStore.userData">
+        Grocery
+      </router-link> |
+      <router-link to="/login" v-if="Object.keys(userStore.userData).length === 0">
+        Login
+      </router-link> |
+      <router-link to="/register" v-if="Object.keys(userStore.userData).length === 0">
+        Register
+      </router-link>
+    </nav>
+    <router-view />
+  </div>
+
 </template>
 
 <script setup lang="ts">
-
+import { useUserStore } from "@/store/user";
+const userStore = useUserStore();
 </script>
 
 <style lang="scss">

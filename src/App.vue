@@ -8,6 +8,9 @@
         <a-menu-item v-if="userStore.loggedIn" key="profile">
           <router-link to="/profile">Perfil</router-link>
         </a-menu-item>
+        <a-menu-item v-if="userStore.loggedIn" key="grocery">
+          <router-link to="/grocery">Grocery</router-link>
+        </a-menu-item>
         <a-menu-item v-if="!userStore.loggedIn" key="login">
           <router-link to="/login">Login</router-link>
         </a-menu-item>

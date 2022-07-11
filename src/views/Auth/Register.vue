@@ -37,6 +37,7 @@
 import { reactive } from "vue";
 import { useUserStore } from "@/store/user";
 import { message } from "ant-design-vue";
+import { Login } from "@/models/login.model";
 
 const userStore = useUserStore();
 
@@ -56,8 +57,7 @@ const validateRePass = async (_rule: any, value: any) => {
   Promise.resolve();
 };
 
-const onFinish = async (values: any) => {
-  console.log("Success:", values);
+const onFinish = async (values: Login) => {
   const res = await userStore.registerUser(values.email, values.password);
   if (!res) {
     return message.success("Revisa tu correo electrónico para continuar");

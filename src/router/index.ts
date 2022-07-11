@@ -14,7 +14,7 @@ const requireAuth = async (to, from, next) => {
   userStore.loadingSession = false;
 };
 
-const redireccion = async (to, from, next) => {
+const redirection = async (to, from, next) => {
   const databaseStore = useDatabaseStore();
   const userStore = useUserStore();
   userStore.loadingSession = true;
@@ -73,10 +73,10 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/Profile.vue"),
   },
   {
-    name: "redireccion",
+    name: "redirection",
     path: "/:pathMatch(.*)*",
     component: () => import("@/views/NotFound.vue"),
-    beforeEnter: redireccion,
+    beforeEnter: redirection,
   },
 ];
 

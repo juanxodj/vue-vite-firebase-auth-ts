@@ -34,17 +34,17 @@
 import { reactive } from "vue";
 import { useUserStore } from "@/store/user";
 import { message } from "ant-design-vue";
+import { Login } from "@/models/login.model";
 import "ant-design-vue/es/message/style/css";
 
 const userStore = useUserStore();
 
-const formState = reactive({
+const formState: Login = reactive({
   email: "jlsc92@gmail.com",
   password: "123456",
 });
 
-const onFinish = async (values: any) => {
-  console.log("Success:", values);
+const onFinish = async () => {
   const res = await userStore.loginUser(formState.email, formState.password);
   if (res === "auth/wrong-password") {
     message.error("credenciales no válidas");

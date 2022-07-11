@@ -61,13 +61,14 @@ export const useUserStore = defineStore("userStore", {
     async setUser(user: User) {
       try {
         const docRef = doc(db, "users", user.uid);
-
-        this.userData = {
+        let userData = {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName,
           photoURL: user.photoURL,
-        };
+        }
+
+        this.userData = userData;
 
         await setDoc(docRef, this.userData);
       } catch (error) {
@@ -95,9 +96,9 @@ export const useUserStore = defineStore("userStore", {
       const databaseStore = useDatabaseStore();
       databaseStore.$reset();
       try {
-        router.push("/login");
         await signOut(auth);
         this.loggedIn = false;
+        router.push("/login");
       } catch (error) {
         return error;
       }

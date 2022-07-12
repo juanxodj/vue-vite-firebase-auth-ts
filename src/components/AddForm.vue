@@ -11,7 +11,7 @@
       <a-input v-model:value="formState.url"></a-input>
     </a-form-item>
     <a-form-item>
-      <a-button type="primary" html-type="submit" :loading="databaseStore.loadingURL">
+      <a-button type="primary" html-type="submit" :loading="databaseStore.loading">
         Agregar
       </a-button>
     </a-form-item>

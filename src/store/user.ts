@@ -1,3 +1,4 @@
+import { Image } from './../models/image.model';
 import { defineStore } from "pinia";
 import {
   createUserWithEmailAndPassword,
@@ -25,16 +26,16 @@ export const useUserStore = defineStore("userStore", {
     async registerUser(email: string, password: string) {
       this.loadingUser = true;
       try {
-        await createUserWithEmailAndPassword(auth, email, password);
-        await sendEmailVerification(auth.currentUser);
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCredential.user);
         router.push("/login");
       } catch (error) {
-        return error;
+        console.log(error);
       } finally {
         this.loadingUser = false;
       }
     },
-    async updateUser(displayName: string, imagen: object) {
+    async updateUser(displayName: string, imagen: Image) {
       this.loadingUser = true;
       try {
         if (imagen) {
@@ -53,7 +54,7 @@ export const useUserStore = defineStore("userStore", {
         });
         this.setUser(auth.currentUser);
       } catch (error) {
-        return error;
+        console.log(error);
       } finally {
         this.loadingUser = false;
       }
@@ -72,7 +73,7 @@ export const useUserStore = defineStore("userStore", {
 
         await setDoc(docRef, this.userData);
       } catch (error) {
-        return error;
+        console.log(error);
       }
     },
     async loginUser(email: string, password: string) {
@@ -87,7 +88,7 @@ export const useUserStore = defineStore("userStore", {
         this.loggedIn = true;
         router.push("/");
       } catch (error) {
-        return error;
+        console.log(error);
       } finally {
         this.loadingUser = false;
       }
@@ -100,7 +101,7 @@ export const useUserStore = defineStore("userStore", {
         this.loggedIn = false;
         router.push("/login");
       } catch (error) {
-        return error;
+        console.log(error);
       }
     },
     currentUser() {

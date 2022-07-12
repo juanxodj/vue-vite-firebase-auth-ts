@@ -7,8 +7,10 @@ const requireAuth = async (to, from, next) => {
   userStore.loadingSession = true;
   const user = await userStore.currentUser();
   if (user) {
+    userStore.loggedIn = true;
     next();
   } else {
+    userStore.loggedIn = false;
     next("/login");
   }
   userStore.loadingSession = false;
@@ -46,16 +48,25 @@ const routes: Array<RouteRecordRaw> = [
     path: "/about",
     name: "about",
     component: () => import("@/views/About.vue"),
+    beforeEnter: requireAuth
   },
   {
     path: "/data",
     name: "data",
     component: () => import("@/views/Data.vue"),
+    beforeEnter: requireAuth
   },
   {
     path: "/grocery",
     name: "grocery",
     component: () => import("@/views/Grocery.vue"),
+    beforeEnter: requireAuth
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("@/views/Profile.vue"),
+    beforeEnter: requireAuth
   },
   {
     path: "/login",
@@ -66,11 +77,6 @@ const routes: Array<RouteRecordRaw> = [
     path: "/register",
     name: "register",
     component: () => import("@/views/Auth/Register.vue"),
-  },
-  {
-    path: "/profile",
-    name: "profile",
-    component: () => import("@/views/Profile.vue"),
   },
   {
     name: "redirection",

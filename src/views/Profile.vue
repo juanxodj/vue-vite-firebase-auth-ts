@@ -44,9 +44,17 @@ import { useUserStore } from "@/store/user";
 import { message } from "ant-design-vue";
 import { ref } from "vue";
 
+interface File {
+  uid: string;
+  name: string;
+  size: number;
+  type: string;
+  thumbUrl: string;
+}
+
 const userStore = useUserStore();
 const fileList = ref([]);
-const beforeUpload = (file) => {
+const beforeUpload = () => {
   return false;
 };
 const handleRemove = (file) => {
@@ -56,11 +64,13 @@ const handleRemove = (file) => {
   fileList.value = newFileList;
 };
 const handleChange = (info) => {
+  console.log('----INFO----');
+  console.log(info.file);
   // validar los tipos de imágenes
   if (info.file.status !== "uploading") {
     const isJpgOrPng = info.file.type === "image/jpeg" || info.file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error("Solo imagenes png o jpg");
+      message.error("Sólo imágenes png o jpg");
       handleRemove(info.file);
       return;
     }

@@ -2,10 +2,11 @@
   <h1>Grocery List App</h1>
 
   <a-button type="primary" @click.prevent="createItem">Add Item</a-button>
-  <a-table :data-source="items" :columns="columns">
+  <a-table :data-source="items" :columns="columns" bordered @change="handleChange">
     <template #headerCell="{ column }">
       <template v-if="column.key === 'name'">
         <span>
+          <smile-outlined />
           Name
         </span>
       </template>
@@ -33,11 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { generateFakeData, Item } from "@/models/item.model";
 import { useMainStore } from "@/store/item";
 import moment from 'moment';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue';
+import { EditOutlined, DeleteOutlined, SmileOutlined } from '@ant-design/icons-vue';
+import type { TableColumnType, TableProps } from 'ant-design-vue';
 
 const items = ref<Item[]>([]);
 const mainStore = useMainStore();
@@ -59,36 +61,59 @@ function capitalizeFirstLetter(str: string) {
   return capitalized;
 }
 
-const columns = [
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    key: 'id',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Description',
-    dataIndex: 'description',
-    key: 'description',
-  },
-  {
-    title: 'Quantity',
-    dataIndex: 'quantity',
-    key: 'quantity',
-  },
-  {
-    title: 'Created At',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-  },
-  {
-    title: 'Actions',
-    key: 'actions',
-  },
-]
+const filteredInfo = ref();
+const sortedInfo = ref();
+
+const columns = computed<TableColumnType[]>(() => {
+  const filtered = filteredInfo.value || {};
+  const sorted = sortedInfo.value || {};
+  return [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      width: '15%',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+      filters: [
+        { text: 'Joe', value: 'Joe' },
+        { text: 'Jim', value: 'Jim' },
+      ],
+      filteredValue: filtered.name || null,
+      onFilter: (value: string, record: Item) => record.name.includes(value),
+      sorter: (a: Item, b: Item) => a.name.length - b.name.length,
+      sortOrder: sorted.columnKey === 'name' && sorted.order,
+      ellipsis: true,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity',
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+    },
+  ]
+});
+
+const handleChange: TableProps['onChange'] = (pagination, filters, sorter) => {
+  console.log('Various parameters', pagination, filters, sorter);
+  filteredInfo.value = filters;
+  sortedInfo.value = sorter;
+};
 </script>
 

@@ -19,7 +19,7 @@ export const useDatabaseStore = defineStore("database", {
   state: () => ({
     documents: [] as Document[],
     loadingDoc: false,
-    loading: false,
+    loading: false
   }),
   actions: {
     async getURL(id: string) {
@@ -109,11 +109,11 @@ export const useDatabaseStore = defineStore("database", {
 
         const docSpan = await getDoc(docRef);
         if (!docSpan.exists()) {
-          throw new Error("no existe el doc");
+          throw new Error("No existe el documento");
         }
 
         if (docSpan.data().user !== auth.currentUser?.uid) {
-          throw new Error("no le pertenece ese documento");
+          throw new Error("No le pertenece ese documento");
         }
 
         await updateDoc(docRef, {
@@ -125,7 +125,7 @@ export const useDatabaseStore = defineStore("database", {
         );
         router.push("/");
       } catch (error) {
-        return error;
+        console.log(error);
       } finally {
         this.loading = false;
       }

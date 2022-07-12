@@ -6,20 +6,25 @@
 
     <a-spin v-if="databaseStore.loadingDoc" />
 
-    <a-space direction="vertical" style="width: 100%">
-      <a-card v-for="item of databaseStore.documents" :key="item.id" :title="item.short">
-        <template #extra>
-          <a-space>
-            <a-button @click="router.push(`/edit/${item.id}`)">Editar</a-button>
-            <a-popconfirm title="¿Estás seguro?" ok-text="Yes" cancel-text="No" @confirm="confirm(item.id)"
-              @cancel="cancel">
-              <a-button danger>Eliminar</a-button>
-            </a-popconfirm>
-          </a-space>
-        </template>
-        <p>{{ item.name }}</p>
-      </a-card>
-    </a-space>
+    <a-row>
+      <a-col :span="12" v-for="item of databaseStore.documents.reverse()" :key="item.id" style="padding: 5px;">
+        <a-space direction="vertical" style="width: 100%;">
+          <a-card :title="item.short">
+            <template #extra>
+              <a-space>
+                <a-button @click="router.push(`/edit/${item.id}`)">Editar</a-button>
+                <a-popconfirm title="¿Estás seguro?" ok-text="Yes" cancel-text="No" @confirm="confirm(item.id)"
+                  @cancel="cancel">
+                  <a-button danger>Eliminar</a-button>
+                </a-popconfirm>
+              </a-space>
+            </template>
+            <p>{{ item.name }}</p>
+          </a-card>
+        </a-space>
+      </a-col>
+    </a-row>
+
   </div>
 </template>
 

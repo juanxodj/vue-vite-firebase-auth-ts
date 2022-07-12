@@ -1,4 +1,31 @@
 {
+  "menu": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "grocery": "Comestibles",
+    "login": "Iniciar Sesión",
+    "register": "Registrar",
+    "logout": "Cerrar Sesión",
+    "language": "Idioma"
+  },
+  "enter-url": "Ingrese URL",
   "message": "Hola i18n!!",
-  "about-page": "Página Acerca de Nosotros"
+  "about-page": "Página Acerca de Nosotros",
+  "actions": {
+    "yes": "Si",
+    "no": "No",
+    "add": "Agregar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "are-you-sure": "¿Está seguro?"
+  },
+  "login": {
+    "enter": "Acceder",
+    "email": "Correo electrónico",
+    "password": "Contraseña"
+  },
+  "validations": {
+    "email": "Por favor escriba un email válido",
+    "password": "Por favor escriba una contraseña de 6 carácteres"
+  }
 }

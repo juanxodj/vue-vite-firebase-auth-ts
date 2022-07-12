@@ -1,29 +1,35 @@
 <template>
+  <form>
+    <label>{{ t('menu.language') }}</label>
+    <select v-model="locale">
+      <option value="es">Español</option>
+      <option value="en">Inglés</option>
+    </select>
+  </form>
   <a-row>
     <a-col :xs="{ span: 24 }" :sm="{ span: 18, offset: 3 }" :lg="{ span: 12, offset: 6 }">
       <a-form :model="formState" @finish="onFinish" @finishFailed="onFinishFailed" name="basic" layout="vertical"
         autocomplete="off">
-        <a-form-item label="Email" name="email" :rules="[
+        <a-form-item :label="t('login.email')" name="email" :rules="[
           {
             required: true,
             type: 'email',
-            message: 'Por favor escriba un email válido',
+            message: t('validations.email'),
           },
         ]">
           <a-input v-model:value="formState.email"></a-input>
         </a-form-item>
-        <a-form-item label="Password" name="password" :rules="[
+        <a-form-item :label="t('login.password')" name="password" :rules="[
           {
             required: true,
             min: 6,
-            message:
-              'Por favor escriba una contraseña de 6 carácteres',
+            message: t('validations.password'),
           },
         ]">
           <a-input-password v-model:value="formState.password"></a-input-password>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit">Acceder</a-button>
+          <a-button type="primary" html-type="submit">{{ t('login.enter') }}</a-button>
         </a-form-item>
       </a-form>
     </a-col>
@@ -37,6 +43,7 @@ import { message } from "ant-design-vue";
 import { Login } from "@/models/login.model";
 import "ant-design-vue/es/message/style/css";
 
+const { locale, t } = useI18n();
 const userStore = useUserStore();
 
 const formState: Login = reactive({

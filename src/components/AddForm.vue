@@ -1,6 +1,6 @@
 <template>
   <a-form :model="formState" @finish="onFinish" name="basicAdd" layout="vertical" autocomplete="off">
-    <a-form-item label="Ingrese URL" name="url" :rules="[
+    <a-form-item :label="t('enter-url')" name="url" :rules="[
       {
         required: true,
         whitespace: true,
@@ -12,7 +12,7 @@
     </a-form-item>
     <a-form-item>
       <a-button type="primary" html-type="submit" :loading="databaseStore.loading">
-        Agregar
+        {{ t('actions.add') }}
       </a-button>
     </a-form-item>
   </a-form>
@@ -24,6 +24,7 @@ import { regExpUrl } from "@/utils/regExpUrl";
 import { useDatabaseStore } from "@/store/database";
 import { message } from "ant-design-vue";
 
+const { t } = useI18n();
 const databaseStore = useDatabaseStore();
 const formState = reactive({
   url: "",

@@ -1,4 +1,31 @@
 {
-  "message": "hello i18n !!",
-  "about-page": "About Page"
+  "menu": {
+    "home": "Home",
+    "profile": "Profile",
+    "grocery": "Grocery",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "enter-url": "Ingrese URL",
+  "message": "Hola i18n!!",
+  "about-page": "Página Acerca de Nosotros",
+  "actions": {
+    "yes": "Si",
+    "no": "No",
+    "add": "Agregar",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "are-you-sure": "¿Está seguro?"
+  },
+  "login": {
+    "enter": "Enter",
+    "email": "Email",
+    "password": "Password"
+  },
+  "validations": {
+    "email": "Por favor escriba un email válido",
+    "password": "Por favor escriba una contraseña de 6 carácteres"
+  }
 }

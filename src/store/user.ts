@@ -117,7 +117,7 @@ export const useUserStore = defineStore("userStore", {
                 photoURL: user.photoURL,
               };
             } else {
-              this.userData = {};
+              this.userData = {} as User;
               const databaseStore = useDatabaseStore();
               databaseStore.$reset();
             }

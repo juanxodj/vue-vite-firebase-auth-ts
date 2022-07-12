@@ -1,0 +1,10 @@
+{
+  "home": "家",
+  "profile": "プロフィール",
+  "grocery": "買い物",
+  "login": "ログインする",
+  "register": "登録",
+  "logout": "ログアウト",
+  "message": "こんにちはi18n !!",
+  "about-page": "ページについて"
+}
